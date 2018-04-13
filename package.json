@@ -1,20 +1,19 @@
 {
-  "name": "415project",
-  "version": "1.0.0",
-  "description": "CMPS415Projcet",
-  "main": "app.js",
+  "name": "project415v4",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./bin/www"
   },
   "dependencies": {
-    "body-parser": "^1.18.2",
-    "express": "*",
-    "method-override": "^2.3.10",
-    "mongodb": "^3.0.6",
-    "mongoose": "^5.0.14",
-    "morgan": "^1.9.0",
-    "node-restful": "^0.2.6"
-  },
-  "author": "Jon Schackai",
-  "license": "ISC"
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "express": "~4.16.0",
+    "http-errors": "~1.6.2",
+    "jade": "~1.11.0",
+    "lodash": "^4.17.5",
+    "morgan": "~1.9.0",
+    "node-restful": "^0.2.6",
+    "save": "^2.3.2"
+  }
 }

@@ -112,10 +112,11 @@ router.delete('/rest/emr', function(req, res,) {
    while (EMRData.length != i){
 
   if (EMRData[i].ssn == ssn) {
-        delete( EMRData[i]);
+       // destroy( EMRData[i]);
        
           
-          
+       var data2= EMRData.pop(EMRData[i]);
+       delete data2;
         res.status(200).json(EMRData);
         break; 
       }

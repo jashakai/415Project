@@ -19,7 +19,7 @@ function CreateEntity(ssn, Fname,Lname,Healthy,BYear) {
 
 
 var EMRData = [
-    new CreateEntity('1', 'Larry','Enticer', 'N', '1954'),
+  new CreateEntity('1', 'Larry','Enticer', 'N', '1954'),
  	new CreateEntity('2', 'Sahrah','Anderson', 'Y', '1964'),    
  	new CreateEntity('3', 'Bob','Shmit', 'Y', '1999'),
  	new CreateEntity('4', 'Goldie','Carlson', 'Y', '2009')
@@ -35,7 +35,7 @@ router.get('/index', function(req, res,) {
 });
 
 router.get('/rest/emr', function(req, res,) {
-	res.json(EMRData);
+	res.status(200).json(EMRData);
 
 });
 router.get('/rest/emr/:ssn', function(req, res) {
@@ -46,7 +46,7 @@ var i = 0;
 while (EMRData.length != i){
 
 	if (EMRData[i].ssn == data) {
-    	  res.json(EMRData[i]);
+    	  res.status(200).json(EMRData[i]);
     	  break; 
       }
       else if (EMRData[i].ssn != data ){
@@ -57,10 +57,10 @@ while (EMRData.length != i){
      
       }
 	}
-	res.json(resp);
+	res.status(404).json(resp);
 });
 router.post('/rest/emr', function(req, res,) {
-	var ssn = req.body.ssn;
+	  var ssn = req.body.ssn;
     var Fname = req.body.Fname;
     var Lname = req.body.Lname;
     var Healthy = req.body.Healthy;
@@ -70,7 +70,71 @@ router.post('/rest/emr', function(req, res,) {
 
 
 	EMRData.push(data)
-	res.json(EMRData);
+	res.status(200).json(EMRData);
+
+});
+router.put('/rest/emr', function(req, res,) {
+    var data = req.body.ssn ;
+    var ssn = req.body.ssn;
+    
+var resp = 'No such SSN:'+ data ;
+var i = 0;
+
+while (EMRData.length != i){
+
+  if (EMRData[i].ssn == ssn) {
+        EMRData[i].ssn = ssn;
+        EMRData[i].Fname = req.body.Fname;
+        EMRData[i].Lname = req.body.Lname;
+        EMRData[i].Healthy = req.body.Healthy;
+        EMRData[i].BYear = req.body.BYear;
+          
+        res.status(200).json(EMRData);
+        break; 
+      }
+      else if (EMRData[i].ssn != ssn ){
+        
+          i++;
+        
+        
+     
+      }
+  }
+  
+ res.json(resp);
+
+});
+router.delete('/rest/emr', function(req, res,) {
+    var data = req.body.ssn;
+    var resp = 'No such Record:'+ data ;
+    var ssn = req.body.ssn;
+    var i = 0;   
+   while (EMRData.length != i){
+
+  if (EMRData[i].ssn == ssn) {
+        delete( EMRData[i]);
+       
+          
+          
+        res.status(200).json(EMRData);
+        break; 
+      }
+      else if (EMRData[i].ssn != ssn ){
+        
+          i++;
+        
+        
+     
+      }
+
+ 
+  }
+  
+ res.json(resp);
+
+   
+
+
 
 });
 module.exports = router;

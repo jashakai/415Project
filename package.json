@@ -3,7 +3,7 @@
   "version": "9.1.266",
   "private": true,
   "engines": {
-    "node": "8.11.1", 
+    "node": "8.11.1",
     "npm": "5.8.0",
     "nodemon": "1.17.3"
   },

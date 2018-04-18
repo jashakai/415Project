@@ -25,7 +25,15 @@ var EMRData = [
  	new CreateEntity('4', 'Goldie','Carlson', 'Y', '2009')
 ];
 
-
+Array.prototype.clean = function(deleteValue) {
+  for (var i = 0; i < this.length; i++) {
+    if (this[i] == deleteValue) {         
+      this.splice(i, 1);
+      i--;
+    }
+  }
+  return this;
+};
     
 /* GET home page. */
 router.get('/index', function(req, res,) {
@@ -111,13 +119,14 @@ router.delete('/rest/emr', function(req, res,) {
     var i = 0;   
    while (EMRData.length != i){
 
-  if (EMRData[i].ssn == ssn) {
-       // destroy( EMRData[i]);
+  if (EMRData[i].ssn === ssn) {
        
-          
-       var data2= EMRData.pop(EMRData[i]);
-       delete data2;
+       EMRData[i] = undefined; 
+      
+       
+        EMRData.clean(undefined);
         res.status(200).json(EMRData);
+        
         break; 
       }
       else if (EMRData[i].ssn != ssn ){
@@ -131,7 +140,9 @@ router.delete('/rest/emr', function(req, res,) {
  
   }
   
- res.json(resp);
+
+  EMRData.clean(undefined);
+  res.json(resp);
 
    
 

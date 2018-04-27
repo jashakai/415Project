@@ -88,8 +88,8 @@ router.get('/rest/emr', function(req, res,) {
    }
   }
   else {
-    Locked = 0; 
-    res.status(200).json("Error");
+  
+    res.status(200).json(respLocked);
 
   }
 

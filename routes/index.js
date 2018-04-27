@@ -7,28 +7,13 @@ var array = require('lodash/array');
 var object = require('lodash/fp/object');
 
 
-var userTemp = random({start: 3000, end: 5090});
-var userNum = userTemp.pop(userTemp);
+var userTemp = 0;
+var userNum = 0;
 var Lock = 0 ; 
 
 
 var respLocked = "This data is locked.";
 
-function LockIt(){
-
-    if (Lock == 0){
-
-       Lock = userTemp.pop(userTemp);
-        
-      return Lock; 
-
-    }
-    
-    else 
-      Lock = 0;
-      return 0; 
-
-}
 
 function CreateEntity(ssn, Fname,Lname,Healthy,BYear,Locked) {
     this.ssn = ssn;
@@ -168,6 +153,10 @@ router.delete('/rest/emr', function(req, res,) {
 });
 
 router.lock('/rest/emr', function(req, res,) {
+   userTemp2 = random({start: 3000, end: 5090});
+   userNum = userTemp2.pop(userTemp2);
+   Lock = userTemp2.pop(userTemp2);
+   
   res.status(200).json(Lock);
 
 });

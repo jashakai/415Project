@@ -58,34 +58,14 @@ router.get('/rest/emr', function(req, res,) {
   var temp2 = parseInt(temp);
   
   if (Locked == 0){
-      
-      
-      
-     res.status(200).json(EMRData);
+      res.status(200).json(EMRData);
 
   }
   else if(Locked == 1 && temp2 == userNum){
     var i = 0;
-
-   while(EMRData.length != i){
-
-    if(EMRData[i].Lock == userNum){
       
-     
-       
        res.status(200).json(EMRData);
       
-    }
-    
-    else {
-      res.status(200).json(respLocked);
-      break;
-    
-    }
-
-    
-    i++;
-   }
   }
   else {
   
@@ -97,63 +77,126 @@ router.get('/rest/emr', function(req, res,) {
  
 });
 router.get('/rest/emr/:ssn', function(req, res) {
-
-var	data = req.params.ssn;
+var temp = req.cookies.userNum;
+var temp2 = parseInt(temp);
+var data = req.params.ssn;
 var resp = 'No such SSN:'+ data +' ┻━┻ ︵ヽ(`Д´)ﾉ︵﻿ ┻━┻ ';
-var i = 0; 
-while (EMRData.length != i){
 
-	if (EMRData[i].ssn == data) {
-    	  EMRData[i].Lock = userNum; 
-        res.status(200).json(EMRData[i]);
-    	  break; 
+
+if (Locked == 0){
+    var i = 0; 
+    while (EMRData.length != i){
+
+      if (EMRData[i].ssn == data) { 
+          res.status(200).json(EMRData[i]);
+          break; 
       }
       else if (EMRData[i].ssn != data ){
-      	
-      		i++;
-      	
-      	
-     
+          i++;
       }
-	}
-	res.status(404).json(resp);
+    }
+    res.status(404).json(resp);  
+  }
+  else if(Locked == 1 && temp2 == userNum){
+    var i = 0; 
+    while (EMRData.length != i){
+
+      if (EMRData[i].ssn == data) { 
+          res.status(200).json(EMRData[i]);
+          break; 
+      }
+      else if (EMRData[i].ssn != data ){
+          i++;
+      }
+    }
+    res.status(404).json(resp);  
+  }else{
+    res.status(200).json(respLocked);
+  }
+
 });
 router.post('/rest/emr', function(req, res,) {
-	  var ssn = req.body.ssn;
-    var Fname = req.body.Fname;
-    var Lname = req.body.Lname;
-    var Healthy = req.body.Healthy;
-    var BYear = req.body.BYear;
-  
-   
-   var data = new CreateEntity(ssn, Fname, Lname, Healthy, BYear, Lock);
+  var temp = req.cookies.userNum;
+  var temp2 = parseInt(temp);
 
+  if (Locked == 0){
+      var ssn = req.body.ssn;
+      var Fname = req.body.Fname;
+      var Lname = req.body.Lname;
+      var Healthy = req.body.Healthy;
+      var BYear = req.body.BYear;
+      var data = new CreateEntity(ssn, Fname, Lname, Healthy, BYear, Lock);
+    
+      EMRData.push(data)
+      res.status(200).json(EMRData);
+    }
+    else if(Locked == 1 && temp2 == userNum){
+      var ssn = req.body.ssn;
+      var Fname = req.body.Fname;
+      var Lname = req.body.Lname;
+      var Healthy = req.body.Healthy;
+      var BYear = req.body.BYear;
+      var data = new CreateEntity(ssn, Fname, Lname, Healthy, BYear, Lock);
+    
+      EMRData.push(data)
+      res.status(200).json(EMRData);
+  }else{
 
-	EMRData.push(data)
-	res.status(200).json(EMRData);
+    res.status(200).json(respLocked);
+
+  }
 
 });
 router.put('/rest/emr', function(req, res,) {
+  var temp = req.cookies.userNum;
+  var temp2 = parseInt(temp);
+  if (Locked == 0){
+    var data = req.body.ssn ;
+    var ssn = req.body.ssn;
+    var resp = 'No such SSN:'+ data ;
+    var i = 0;
+
+  while (EMRData.length != i){
+
+    if (EMRData[i].ssn == ssn) {
+          EMRData[i].ssn = ssn;
+         EMRData[i].Fname = req.body.Fname;
+          EMRData[i].Lname = req.body.Lname;
+          EMRData[i].Healthy = req.body.Healthy;
+         EMRData[i].BYear = req.body.BYear;     
+          res.status(200).json(EMRData);
+          break; 
+      }
+      else if (EMRData[i].ssn != ssn ){
+          i++; 
+      }
+  }
+  
+ res.json(resp);
+
+
+  }
+  else if(Locked == 1 && temp2 == userNum){
     var data = req.body.ssn ;
     var ssn = req.body.ssn;
     
-var resp = 'No such SSN:'+ data ;
-var i = 0;
+    var resp = 'No such SSN:'+ data ;
+    var i = 0;
 
-while (EMRData.length != i){
+    while (EMRData.length != i){
 
-  if (EMRData[i].ssn == ssn) {
-        EMRData[i].ssn = ssn;
-        EMRData[i].Fname = req.body.Fname;
-        EMRData[i].Lname = req.body.Lname;
-        EMRData[i].Healthy = req.body.Healthy;
-        EMRData[i].BYear = req.body.BYear;
+      if (EMRData[i].ssn == ssn) {
+          EMRData[i].ssn = ssn;
+          EMRData[i].Fname = req.body.Fname;
+          EMRData[i].Lname = req.body.Lname;
+          EMRData[i].Healthy = req.body.Healthy;
+          EMRData[i].BYear = req.body.BYear;
      
           
-        res.status(200).json(EMRData);
-        break; 
-      }
-      else if (EMRData[i].ssn != ssn ){
+          res.status(200).json(EMRData);
+          break; 
+        }
+        else if (EMRData[i].ssn != ssn ){
         
           i++;
         
@@ -164,37 +207,82 @@ while (EMRData.length != i){
   
  res.json(resp);
 
-});
-router.delete('/rest/emr', function(req, res,) {
-    var data = req.body.ssn;
-    var resp = 'No such Record:'+ data ;
-    var ssn = req.body.ssn;
-    var i = 0;   
-   while (EMRData.length != i){
+  }
+  else {
+  
+    res.status(200).json(respLocked);
 
-  if (EMRData[i].ssn === ssn) {
+  }
+
+});
+
+router.delete('/rest/emr', function(req, res,) {
+  var temp = req.cookies.userNum;
+  var temp2 = parseInt(temp);
+  var data = req.body.ssn;
+  var resp = 'No such Record:'+ data ;
+  var ssn = req.body.ssn;
+  
+  if (Locked == 0){
+    var i = 0;   
+    while (EMRData.length != i){
+
+       if (EMRData[i].ssn === ssn) {
        
-       EMRData[i] = undefined; 
+          EMRData[i] = undefined; 
       
        
-        EMRData.clean(undefined);
-        res.status(200).json(EMRData);
+            EMRData.clean(undefined);
+            res.status(200).json(EMRData);
         
-        break; 
-      }
-      else if (EMRData[i].ssn != ssn ){
+            break; 
+        }
+        else if (EMRData[i].ssn != ssn ){
         
-          i++;
-      }
-  }
+              i++;
+        }
+    }
   
-  EMRData.clean(undefined);
-  res.json(resp);
+    EMRData.clean(undefined);
+     res.json(resp);
+  }
+  else if(Locked == 1 && temp2 == userNum){
+    var i = 0;   
+    while (EMRData.length != i){
+
+       if (EMRData[i].ssn === ssn) {
+       
+          EMRData[i] = undefined; 
+      
+       
+            EMRData.clean(undefined);
+            res.status(200).json(EMRData);
+        
+            break; 
+        }
+        else if (EMRData[i].ssn != ssn ){
+        
+              i++;
+        }
+    }
+  
+    EMRData.clean(undefined);
+     res.json(resp);
+  }
+  else {
+  
+    res.status(200).json(respLocked);
+
+  }
+
+    
+   
 
 });
 
 router.lock('/rest/emr', function(req, res,) {
-   
+  var temp = req.cookies.userNum;
+  var temp2 = parseInt(temp); 
    
   if(Locked == 0){
    
@@ -212,7 +300,7 @@ router.lock('/rest/emr', function(req, res,) {
    res.cookie('userNum',userNum,{maxAge: 360000});
    res.status(200).json(EMRData);
   }
-  else if (Locked === 1) {
+  else if (Locked === 1  ) {
     res.status(200).json(respLocked);
 
   }
@@ -230,28 +318,7 @@ router.lock('/rest/emr', function(req, res,) {
 
 });
 
-router.lock('/rest/emr/:ssn', function(req, res) {
 
-var data = req.params.ssn;
-var resp = 'No such SSN:'+ data +' ┻━┻ ︵ヽ(`Д´)ﾉ︵﻿ ┻━┻ ';
-var i = 0; 
-while (EMRData.length != i){
-
-  if (EMRData[i].ssn == data) {
-        EMRData[i].Lock = userNum; 
-        res.status(200).json(EMRData[i]);
-        break; 
-      }
-      else if (EMRData[i].ssn != data ){
-        
-          i++;
-        
-        
-     
-      }
-  }
-  res.status(404).json(resp);
-});
 router.unlock('/rest/emr', function(req, res,) {
   userTemp = 0;
   userNum = 0;

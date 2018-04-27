@@ -155,9 +155,8 @@ router.delete('/rest/emr', function(req, res,) {
 router.lock('/rest/emr', function(req, res,) {
    
    userTemp = random({start: 3000, end: 5090});
-   userNum = userTemp.pop(userTemp);
    Lock = userTemp.pop(userTemp);
-   
+   userNum = Lock;
   res.status(200).json(Lock);
 
 });

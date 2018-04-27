@@ -125,6 +125,7 @@ router.post('/rest/emr', function(req, res,) {
       var Lname = req.body.Lname;
       var Healthy = req.body.Healthy;
       var BYear = req.body.BYear;
+      var Lock = userNum; 
       var data = new CreateEntity(ssn, Fname, Lname, Healthy, BYear, Lock);
     
       EMRData.push(data)
@@ -136,6 +137,7 @@ router.post('/rest/emr', function(req, res,) {
       var Lname = req.body.Lname;
       var Healthy = req.body.Healthy;
       var BYear = req.body.BYear;
+      var Lock = userNum; 
       var data = new CreateEntity(ssn, Fname, Lname, Healthy, BYear, Lock);
     
       EMRData.push(data)
@@ -163,7 +165,8 @@ router.put('/rest/emr', function(req, res,) {
          EMRData[i].Fname = req.body.Fname;
           EMRData[i].Lname = req.body.Lname;
           EMRData[i].Healthy = req.body.Healthy;
-         EMRData[i].BYear = req.body.BYear;     
+         EMRData[i].BYear = req.body.BYear;
+          EMRData[i].Lock = userNum;     
           res.status(200).json(EMRData);
           break; 
       }
@@ -191,7 +194,7 @@ router.put('/rest/emr', function(req, res,) {
           EMRData[i].Lname = req.body.Lname;
           EMRData[i].Healthy = req.body.Healthy;
           EMRData[i].BYear = req.body.BYear;
-     
+          EMRData[i].Lock = userNum;   
           
           res.status(200).json(EMRData);
           break; 

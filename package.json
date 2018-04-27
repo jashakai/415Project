@@ -17,7 +17,8 @@
     "http-errors": "~1.6.2",
     "jade": "~1.11.0",
     "morgan": "~1.9.0",
-    "save": "^2.3.2",
-    "path": "*"
+    "node-random-number": "^0.1.1",
+    "path": "*",
+    "save": "^2.3.2"
   }
 }

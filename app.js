@@ -3,7 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
+var random = require('node-random-number');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -39,5 +39,13 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
+var port = random({start: 3000, end: 4090});
+var port2 = port.pop(port);
+
+app.listen(port2);
+console.log('Running on port '+ port2 +'...')
+
 
 module.exports = app;

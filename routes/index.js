@@ -1,28 +1,51 @@
 var express = require('express');
 var router = express.Router();
 var lodash = require('lodash')
-
+var random = require('node-random-number');
 
 var array = require('lodash/array');
 var object = require('lodash/fp/object');
 
 
+var userTemp = random({start: 3000, end: 5090});
+var userNum = userTemp.pop(userTemp);
+var Lock = 0 ; 
 
-function CreateEntity(ssn, Fname,Lname,Healthy,BYear) {
+
+var respLocked = "This data is locked.";
+
+function LockIt(){
+
+    if (Lock == 0){
+
+       Lock = userTemp.pop(userTemp);
+        
+      return Lock; 
+
+    }
+    
+    else 
+      Lock = 0;
+      return 0; 
+
+}
+
+function CreateEntity(ssn, Fname,Lname,Healthy,BYear,Locked) {
     this.ssn = ssn;
     this.Fname = Fname;
     this.Lname = Lname;
     this.Healthy = Healthy;
     this.BYear = BYear;
+    this.Locked = Locked;
 }
 
 
 
 var EMRData = [
-  new CreateEntity('1', 'Larry','Enticer', 'N', '1954'),
- 	new CreateEntity('2', 'Sahrah','Anderson', 'Y', '1964'),    
- 	new CreateEntity('3', 'Bob','Shmit', 'Y', '1999'),
- 	new CreateEntity('4', 'Goldie','Carlson', 'Y', '2009')
+  new CreateEntity('1', 'Larry','Enticer', 'N', '1954',Lock),
+ 	new CreateEntity('2', 'Sahrah','Anderson', 'Y', '1964',Lock),    
+ 	new CreateEntity('3', 'Bob','Smit', 'Y', '1999',Lock),
+ 	new CreateEntity('4', 'Goldie','Carlson', 'Y', '2009',Lock)
 ];
 
 Array.prototype.clean = function(deleteValue) {
@@ -35,15 +58,16 @@ Array.prototype.clean = function(deleteValue) {
   return this;
 };
     
-/* GET home page. */
+/* GET home page. 
 router.get('/index', function(req, res,) {
   res.render('index', { title: 'Information:', EMRData: EMRData 
-	//res.json(EMRData);
+	res.json(EMRData);
   });
 });
-
+*/
 router.get('/rest/emr', function(req, res,) {
-	res.status(200).json(EMRData);
+
+  res.status(200).json(EMRData);
 
 });
 router.get('/rest/emr/:ssn', function(req, res) {
@@ -54,7 +78,8 @@ var i = 0;
 while (EMRData.length != i){
 
 	if (EMRData[i].ssn == data) {
-    	  res.status(200).json(EMRData[i]);
+    	  EMRData[i].Locked = userNum; 
+        res.status(200).json(EMRData[i]);
     	  break; 
       }
       else if (EMRData[i].ssn != data ){
@@ -73,8 +98,9 @@ router.post('/rest/emr', function(req, res,) {
     var Lname = req.body.Lname;
     var Healthy = req.body.Healthy;
     var BYear = req.body.BYear;
+    var LockNum = LockIt();
    
-   var data = new CreateEntity(ssn, Fname, Lname, Healthy, BYear);
+   var data = new CreateEntity(ssn, Fname, Lname, Healthy, BYear, Lock);
 
 
 	EMRData.push(data)
@@ -96,6 +122,7 @@ while (EMRData.length != i){
         EMRData[i].Lname = req.body.Lname;
         EMRData[i].Healthy = req.body.Healthy;
         EMRData[i].BYear = req.body.BYear;
+     
           
         res.status(200).json(EMRData);
         break; 
@@ -132,21 +159,21 @@ router.delete('/rest/emr', function(req, res,) {
       else if (EMRData[i].ssn != ssn ){
         
           i++;
-        
-        
-     
       }
-
- 
   }
   
-
   EMRData.clean(undefined);
   res.json(resp);
 
-   
+});
 
-
+router.lock('/rest/emr', function(req, res,) {
+  res.status(200).json(Lock);
 
 });
+router.unlock('/rest/emr', function(req, res,) {
+  res.status(200).json(EMRData);
+
+});
+
 module.exports = router;

@@ -2,9 +2,11 @@ var express = require('express');
 var router = express.Router();
 var lodash = require('lodash')
 var random = require('node-random-number');
+var cookieParser = require('cookie-parser');
 
 var array = require('lodash/array');
 var object = require('lodash/fp/object');
+
 
 
 var userTemp = 0;
@@ -52,12 +54,17 @@ router.get('/index', function(req, res,) {
 
 
 router.get('/rest/emr', function(req, res,) {
+  var temp = req.cookies.userNum;
+  var temp2 = parseInt(temp);
+  
   if (Locked == 0){
-
+      
+      
+      
      res.status(200).json(EMRData);
 
   }
-  else if(Locked == 1){
+  else if(Locked == 1 && temp2 == userNum){
     var i = 0;
 
    while(EMRData.length != i){
@@ -65,7 +72,8 @@ router.get('/rest/emr', function(req, res,) {
     if(EMRData[i].Lock == userNum){
       
      
-        res.status(200).json(EMRData);
+       
+       res.status(200).json(EMRData);
       
     }
     
@@ -81,7 +89,7 @@ router.get('/rest/emr', function(req, res,) {
   }
   else {
     Locked = 0; 
-    res.status(200).json(EMRData);
+    res.status(200).json("Error");
 
   }
 
@@ -201,7 +209,7 @@ router.lock('/rest/emr', function(req, res,) {
        EMRData[i].Lock = userNum ;
       i++;
      }
-   
+   res.cookie('userNum',userNum,{maxAge: 360000});
    res.status(200).json(EMRData);
   }
   else if (Locked === 1) {
@@ -248,6 +256,7 @@ router.unlock('/rest/emr', function(req, res,) {
   userTemp = 0;
   userNum = 0;
   Locked = 0 ; 
+  res.clearCookie('userNum');
 
   var i = 0;
   
